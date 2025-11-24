@@ -73,7 +73,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            docker.io/stefanprodan/podinfo
+            docker.io/nsindiso/podinfo
             ghcr.io/stefanprodan/podinfo
           tags: |
             type=raw,value=${{ steps.prep.outputs.VERSION }}
@@ -117,7 +117,7 @@ jobs:
         env:
           COSIGN_EXPERIMENTAL: 1
         run: |
-          cosign sign docker.io/stefanprodan/podinfo:${{ steps.prep.outputs.VERSION }} --yes
+          cosign sign docker.io/nsindiso/podinfo:${{ steps.prep.outputs.VERSION }} --yes
           cosign sign ghcr.io/stefanprodan/podinfo:${{ steps.prep.outputs.VERSION }} --yes
           cosign sign ghcr.io/stefanprodan/charts/podinfo:${{ steps.prep.outputs.VERSION }} --yes
           cosign sign ghcr.io/stefanprodan/manifests/podinfo:${{ steps.prep.outputs.VERSION }} --yes
@@ -129,7 +129,7 @@ jobs:
           context: .
           platforms: linux/amd64
           file: ./Dockerfile.base
-          tags: docker.io/stefanprodan/podinfo-base:latest
+          tags: docker.io/nsindiso/podinfo-base:latest
       - name: Publish helm chart
         uses: stefanprodan/helm-gh-pages@master
         with:
