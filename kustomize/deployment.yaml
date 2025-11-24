@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: podinfod
-        image: nsindiso/podinfo-base:latest
+        image: ghcr.io/nathan-roberts123/podinfo:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
