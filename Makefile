@@ -2,7 +2,7 @@
 #
 # The release version is controlled from pkg/version
 
-TAG?=4.0.2
+TAG?=4.0.3
 NAME:=podinfo
 DOCKER_REPOSITORY:=nsindiso
 DOCKER_IMAGE_NAME:=$(DOCKER_REPOSITORY)/$(NAME)
