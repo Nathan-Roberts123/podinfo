@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: podinfod
-        image: nsindiso/podinfo:1.0.5
+        image: nsindiso/podinfo:4.0.0
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
