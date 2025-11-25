@@ -74,7 +74,7 @@ jobs:
         with:
           images: |
             docker.io/nsindiso/podinfo
-            ghcr.io/Nathan-Roberts123/podinfo
+            ghcr.io/nathan-roberts123/podinfo
           tags: |
             type=raw,value=${{ steps.prep.outputs.VERSION }}
             type=raw,value=latest
@@ -95,23 +95,23 @@ jobs:
       - name: Publish Helm chart to GHCR
         run: |
           helm package charts/podinfo
-          helm push podinfo-${{ steps.prep.outputs.VERSION }}.tgz oci://ghcr.io/Nathan-Roberts123/charts
+          helm push podinfo-${{ steps.prep.outputs.VERSION }}.tgz oci://ghcr.io/nathan-roberts123/charts
           rm podinfo-${{ steps.prep.outputs.VERSION }}.tgz
       - name: Publish Flux OCI artifact to GHCR
         run: |
-          flux push artifact oci://ghcr.io/Nathan-Roberts123/manifests/podinfo:${{ steps.prep.outputs.VERSION }} \
+          flux push artifact oci://ghcr.io/nathan-roberts123/manifests/podinfo:${{ steps.prep.outputs.VERSION }} \
             --path="./kustomize" \
             --source="${{ github.event.repository.html_url }}" \
             --revision="${GITHUB_REF_NAME}/${GITHUB_SHA}"
-          flux tag artifact oci://ghcr.io/Nathan-Roberts123/manifests/podinfo:${{ steps.prep.outputs.VERSION }} --tag latest
+          flux tag artifact oci://ghcr.io/nathan-roberts123/manifests/podinfo:${{ steps.prep.outputs.VERSION }} --tag latest
       - name: Sign artifacts with Cosign
         env:
           COSIGN_EXPERIMENTAL: 1
         run: |
           cosign sign docker.io/nsindiso/podinfo:${{ steps.prep.outputs.VERSION }} --yes
-          cosign sign ghcr.io/Nathan-Roberts123/podinfo:${{ steps.prep.outputs.VERSION }} --yes
-          cosign sign ghcr.io/Nathan-Roberts123/charts/podinfo:${{ steps.prep.outputs.VERSION }} --yes
-          cosign sign ghcr.io/Nathan-Roberts123/manifests/podinfo:${{ steps.prep.outputs.VERSION }} --yes
+          cosign sign ghcr.io/nathan-roberts123/podinfo:${{ steps.prep.outputs.VERSION }} --yes
+          cosign sign ghcr.io/nathan-roberts123/charts/podinfo:${{ steps.prep.outputs.VERSION }} --yes
+          cosign sign ghcr.io/nathan-roberts123/manifests/podinfo:${{ steps.prep.outputs.VERSION }} --yes
       - name: Publish base image
         uses: docker/build-push-action@v6
         with:
@@ -127,26 +127,26 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish config artifact
         run: |
-          flux push artifact oci://ghcr.io/Nathan-Roberts123/podinfo-deploy:${{ steps.prep.outputs.VERSION }} \
+          flux push artifact oci://ghcr.io/nathan-roberts123/podinfo-deploy:${{ steps.prep.outputs.VERSION }} \
             --path="./kustomize" \
             --source="${{ github.event.repository.html_url }}" \
             --revision="${GITHUB_REF_NAME}/${GITHUB_SHA}"
-          flux tag artifact oci://ghcr.io/Nathan-Roberts123/podinfo-deploy:${{ steps.prep.outputs.VERSION }} --tag latest
+          flux tag artifact oci://ghcr.io/nathan-roberts123/podinfo-deploy:${{ steps.prep.outputs.VERSION }} --tag latest
       - name: Sign config artifact with cso
         run: |
           echo "$COSIGN_KEY" > /tmp/cosign.key
-          cosign sign -key /tmp/cosign.key ghcr.io/Nathan-Roberts123/podinfo-deploy:${{ steps.prep.outputs.VERSION }} --yes
-          cosign sign -key /tmp/cosign.key ghcr.io/Nathan-Roberts123/podinfo-deploy:latest --yes
+          cosign sign -key /tmp/cosign.key ghcr.io/nathan-roberts123/podinfo-deploy:${{ steps.prep.outputs.VERSION }} --yes
+          cosign sign -key /tmp/cosign.key ghcr.io/nathan-roberts123/podinfo-deploy:latest --yes
         env:
           COSIGN_PASSWORD: ${{secrets.COSIGN_PASSWORD}}
           COSIGN_KEY: ${{secrets.COSIGN_KEY}}
       - name: Sign artifacts with Notation
         run: |
-          notation sign --signature-format cose ghcr.io/Nathan-Roberts123/podinfo:${{ steps.prep.outputs.VERSION }}
-          notation sign --signature-format cose ghcr.io/Nathan-Roberts123/charts/podinfo:${{ steps.prep.outputs.VERSION }}
-          notation sign --signature-format cose ghcr.io/Nathan-Roberts123/manifests/podinfo:${{ steps.prep.outputs.VERSION }}
-          notation sign --signature-format cose ghcr.io/Nathan-Roberts123/podinfo-deploy:${{ steps.prep.outputs.VERSION }}
-          notation sign --signature-format cose ghcr.io/Nathan-Roberts123/podinfo-deploy:latest
+          notation sign --signature-format cose ghcr.io/nathan-roberts123/podinfo:${{ steps.prep.outputs.VERSION }}
+          notation sign --signature-format cose ghcr.io/nathan-roberts123/charts/podinfo:${{ steps.prep.outputs.VERSION }}
+          notation sign --signature-format cose ghcr.io/nathan-roberts123/manifests/podinfo:${{ steps.prep.outputs.VERSION }}
+          notation sign --signature-format cose ghcr.io/nathan-roberts123/podinfo-deploy:${{ steps.prep.outputs.VERSION }}
+          notation sign --signature-format cose ghcr.io/nathan-roberts123/podinfo-deploy:latest
       - name: Publish release
         uses: goreleaser/goreleaser-action@v6
         with:
